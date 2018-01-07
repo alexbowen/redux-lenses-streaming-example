@@ -1,32 +1,82 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
 import { Actions as KafkaActions } from 'redux-lenses-streaming';
 
 import Connect from '../components/Connect';
 import Publish from '../components/Publish';
 import Subscribe from '../components/Subscribe';
 import MessageList from '../components/MessageList';
+import MessageChart from '../components/MessageChart';
+import { getSelectedMessages } from '../selectors/index';
 
 class MainContainer extends React.Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      streamingMessages: []
+    };
+
+    this.interval = null;
+    this.updateStream = this.updateStream.bind(this);
+    this.stopStreaming = this.stopStreaming.bind(this);
+  }
+
+  updateStream() {
+    if (!this.interval) {
+      this.interval = setInterval(() => {
+        const { streamingMessages } = this.state;
+        const { messages } = this.props;
+
+        if (streamingMessages.length < messages.length) {
+          //Add messages one by one
+          const message = messages[streamingMessages.length];
+          this.setState({ streamingMessages: streamingMessages.concat([message]) })
+        }
+      }, 1000);
+    }
+  }
+
+  stopStreaming() {
+    if (this.interval) {
+      clearInterval(this.interval());
+      this.interval = null;
+    }
+  }
+
+  // componentWillReceiveProps(nextProps) {
+  //   if (nextProps.messages.length === 0) {
+  //     this.stopStreaming();
+  //     this.setState({ streamingMessages: [] })
+  //   } else if (nextProps.messages.length) {
+  //     this.updateStream(nextProps.messages);
+  //   }
+  // }
+
   render() {
-    const { messages, commitMessage } = this.props;
-    const showMessageList = messages.length ? (
-      <MessageList messages={messages} onCommitMessage={commitMessage} />
+    const { messages, selectedMessages, commitMessage, selectedSensor } = this.props;
+    const { streamingMessages } = this.state;
+    const showMessageList = selectedMessages.length ? (
+      <div>
+        <MessageList messages={selectedMessages} onCommitMessage={commitMessage} />
+        <MessageChart messages={selectedMessages} selectedSensor={selectedSensor} />
+      </div>
+
     ) : <div />;
 
     return (
-      <div className="container app">
+      <div className="app">
         <div className="columns">
-          <div className="column">
+          <div className="column is-one-quarter">
             <Connect />
-          </div>
-          <div className="column">
             <Publish />
           </div>
-        </div>
-        <div className="columns">
           <div className="column">
-            <Subscribe />
+            <Subscribe
+              selectedSensor={selectedSensor}
+              messages={messages}
+              selectedMessages={selectedMessages} />
             {showMessageList}
           </div>
         </div>
@@ -43,6 +93,7 @@ MainContainer.defaultProps = {
 };
 
 MainContainer.propTypes = {
+  selectedSensor: PropTypes.string.isRequired,
 };
 
 /**
@@ -50,6 +101,8 @@ MainContainer.propTypes = {
  */
 const mapStateToProps = state => ({
   messages: state.session.messages,
+  selectedMessages: getSelectedMessages(state),
+  selectedSensor: state.session.selectedSensor,
 });
 
 const mapDispatchToProps = dispatch => ({
