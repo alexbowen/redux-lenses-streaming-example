@@ -77,7 +77,7 @@ class Subscribe extends React.Component {
       (<button
         onClick={this.onUnsubscribe.bind(this, subscription)}
         key={subscription}
-        className="button is-danger is-outlined is-small is-pulled-right"
+        className="button is-danger is-outlined is-pulled-right"
       >
         <span>{subscription}</span>
         <span className="icon is-small">
@@ -89,7 +89,7 @@ class Subscribe extends React.Component {
     const sensors = sensorKeys && sensorKeys.length ?
       <Select
         name="sensorSelect"
-        className="select is-primary is-small is-pulled-right sensor-select"
+        className="sensor-select is-small is-pulled-right"
         placeholder="Sensor"
         value={selectedSensor}
         onChange={this.onSensorSelected}
@@ -123,6 +123,13 @@ class Subscribe extends React.Component {
             >
               Subscribe
            </button>
+            <label className="checkbox is-size-7 has-text-info has-text-weight-semibold onlyFuture">
+              <input type="checkbox"
+                name="onlyFuture"
+                checked={onlyFuture}
+                onChange={this.handleInputChange} />
+              Message Time > Now
+            </label>
             <button
               onClick={this.onClearMessages}
               className="button is-small is-danger"
@@ -131,25 +138,12 @@ class Subscribe extends React.Component {
               Clear Messages
             </button>
           </div>
-          <div className="control">
-            <label className="checkbox">
-              <input type="checkbox"
-                name="onlyFuture"
-                checked={onlyFuture}
-                onChange={this.handleInputChange} />
-              Message Time > Now
-            </label>
+          <div className="control is-pulled-right">
+            Number of messages: {(selectedMessages && selectedMessages.length) || 0}
           </div>
           <div className="control">
             {sensors}
-          </div>
-          <div className="control">
             {topics}
-          </div>
-        </div>
-        <div className="panel-block">
-          <div className="control">
-            Number of messages: {(selectedMessages && selectedMessages.length) || 0}
           </div>
         </div>
       </nav>

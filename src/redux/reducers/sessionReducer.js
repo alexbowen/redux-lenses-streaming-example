@@ -4,9 +4,9 @@ import { Type } from '../actions';
 
 export const INITIAL_STATE = {
   heartbeatCount: 0,
-  host: 'wss://master.lensesui.dev.landoop.com/api/kafka/ws',
-  clientId: 'seb',
-  user: 'admin',
+  host: '',
+  clientId: '',
+  user: '',
   password: '',
   messages: {},
   sensorKeys: [],
@@ -44,8 +44,6 @@ const onKafkaMessage = (state, action) => {
       selectedSensor: state.selectedSensor
         || (Object.keys(updatedMessages) && Object.keys(updatedMessages)[0])
         || ''
-      // messages: state.messages.concat(messages.map((message) =>
-      //   Object.assign({}, message, { value: JSON.parse(message.value) })))
     });
 };
 

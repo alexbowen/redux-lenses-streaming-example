@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
+var moment = require('moment');
 var Highcharts = require('highcharts/highstock');
 // Load module after Highcharts is loaded
 require('highcharts/modules/exporting')(Highcharts);
@@ -19,16 +20,13 @@ class MessageChart extends React.Component {
     }
 
     componentDidMount() {
-        const chartData = this.state.chartData;
         // Create the chart
         this.chart = Highcharts.stockChart('chart', {
-
             chart: {
                 events: {
 
                 }
             },
-
             rangeSelector: {
                 buttons: [{
                     count: 1,
@@ -46,8 +44,16 @@ class MessageChart extends React.Component {
                 selected: 0
             },
 
+            tooltip: {
+                formatter: function() {
+                    return 'The average temperature on <b>' + moment(this.x).format("DD-MM-YYYY / HH:mm:ss")
+                     +
+                        '</b> was <b>' + Math.round(this.y*100)/100 + '</b>';
+                }
+            },
+
             title: {
-                text: 'Sensor Data'
+                text: 'Sensor Data: Average Temperature'
             },
 
             exporting: {
@@ -56,7 +62,7 @@ class MessageChart extends React.Component {
 
             series: [{
                 name: 'Average Temperature',
-                data: chartData
+                data: []
             }],
 
             responsive: {
@@ -81,18 +87,17 @@ class MessageChart extends React.Component {
     }
 
     componentWillReceiveProps(nextProps) {
-        if (nextProps.messages.length === 0) {
-            this.setState({ chartData: [] })
-            this.chart.redraw();
-        } else if (nextProps.messages.length > this.state.chartData.length) {
-            var series = this.chart.series[0];
+        var series = this.chart.series[0];
 
-            const newData = nextProps.messages.slice(this.state.chartData.length)
+        if ((nextProps.selectedSensor !== this.props.selectedSensor) || (nextProps.messages.length === 0)) {
+            series.setData([]);
+            this.chart.redraw();
+        } else if (nextProps.messages.length > series.data.length) {
+            const newData = nextProps.messages.slice(series.data.length)
                 .map(message => ({ x: message.timestamp, y: message.value.avgTemperature }));
             newData.forEach(message => {
                 series.addPoint([message.x, Math.round(message.y * 100) / 100], false);
             });
-            this.setState({ chartData: this.state.chartData.concat(newData) })
             this.chart.redraw();
         }
     }

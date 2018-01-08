@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import { Table, Column, AutoSizer } from 'react-virtualized';
 
-
 const stringCellRenderer = (value) => {
   return (<center>{value}</center>);
 }
@@ -27,10 +26,15 @@ class MessageList extends React.Component {
       scrollToIndex: undefined,
       useDynamicRowHeight: false,
     }
+    this.rowClassName = this.rowClassName.bind(this);
   }
 
-  componentDidUpdate() {
-    //this.list.scrollToRow(this.props.messages.length);
+  rowClassName({index}) {
+    if (index < 0) {
+      return 'headerRow';
+    } else {
+      return index % 2 === 0 ? 'evenRow' : 'oddRow';
+    }
   }
 
   render() {
@@ -73,12 +77,14 @@ class MessageList extends React.Component {
               <Table
                 ref="Table"
                 headerHeight={30}
-                height={300}
+                height={330}
+                headerClassName="headerText"
                 rowCount={messages.length}
                 rowHeight={30}
                 scrollToIndex={messages.length - 1}
                 width={width}
                 rowGetter={rowGetter}
+                rowClassName={this.rowClassName}
               >
                 <Column
                   label="Index"
@@ -89,6 +95,7 @@ class MessageList extends React.Component {
                 />
                 <Column
                   label="Sensor ID"
+                  flexGrow={1}
                   dataKey="sensorId"
                   width={100}
                   cellRenderer={({cellData}) => stringCellRenderer(cellData)}
@@ -106,7 +113,7 @@ class MessageList extends React.Component {
                   cellRenderer={({ cellData }) => cellRenderer(cellData)}
                 />
                 <Column
-                  label="Average Temp"
+                  label="Avg Temp"
                   dataKey="avgTemperature"
                   width={150}
                   cellRenderer={({ cellData }) => cellRenderer(cellData)}
@@ -124,11 +131,10 @@ class MessageList extends React.Component {
                   cellRenderer={({ cellData }) => cellRenderer(cellData)}
                 />
                 <Column
-                  width={210}
-                  label="Average Humidity"
+                  width={150}
+                  label="Avg Humidity"
                   dataKey="avgHumidity"
                   cellRenderer={({ cellData }) => cellRenderer(cellData)}
-                  flexGrow={1}
                 />
               </Table>
             )}

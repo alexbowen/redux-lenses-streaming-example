@@ -9,6 +9,7 @@ Get and run [Lenses-For-Developers](http://www.landoop.com/docs/lenses/developer
 Clone and run
 
 `npm install`
+`npm run build-prod`
 `npm run start-dev`
 
 Open http://localhost:8000/lenses/
