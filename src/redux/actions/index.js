@@ -7,6 +7,7 @@ export const Type = createTypes(`
   UPDATE_PASSWORD
   CLEAR_MESSAGES
   SHOW_ROW_DETAILS
+  SEARCH_MESSAGES
 `);
 
 const updateHost = (payload) => ({ type: Type.UPDATE_HOST, payload });
@@ -16,11 +17,14 @@ const updatePassword = (payload) => ({ type: Type.UPDATE_PASSWORD, payload });
 const clearMessages = () => ({ type: Type.CLEAR_MESSAGES });
 const showRowDetails = (payload) => ({ type: Type.SHOW_ROW_DETAILS, payload });
 
+const searchMessages = (payload = '') => ({ type: Type.SEARCH_MESSAGES, payload });
+
 export const Action = {
   updateHost,
   updateClientId,
   updateUser,
   updatePassword,
   clearMessages,
-  showRowDetails
+  showRowDetails,
+  searchMessages
 }
