@@ -8,3 +8,7 @@ Notes of actions taken for the lenses coding exercise
 So initially, as there were no existing tests, i wrote a really simple reducer test just so i could check that webpack etc was configured correctly to run a test suite.
 
 3. Implement ability to search messages list. The data in the messages seemed to be quite arbitary and mainly numeric so i decided to allow ability to search by message topic. I added the tests and search term filtering of the message list first. For problems decribed in 2, i did not implement any UI at this point.
+
+4. Add the UI for the search functionality. Created new component for the search input. This is a function component and uses the React useRef hook to effectivley manage its state. IMO 90% the components in this app shoul be function components not class components. There is far too much logic in them that can be abstracted and more effectivly tested. Also if function components were used you could prevent a lot of uneccesary re-rendering that might contribute to the performance of the application not seeming great at the moment.
+
+It would have been nice to introduce some enzyme UI tests at this point but i feel there is a lot of component refactoring to do first.

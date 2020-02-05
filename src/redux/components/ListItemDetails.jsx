@@ -29,6 +29,7 @@ class ListItemDetails extends React.Component {
 
   render() {
     let arr = [];
+
     const { message, onShowRowDetails } = this.props;
     const { value } = message;
     if (value) {

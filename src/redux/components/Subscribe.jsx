@@ -1,10 +1,11 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import classnames from 'classnames';
 import { Actions as KafkaActions } from 'redux-lenses-streaming';
 import { Action } from '../actions';
 
+import ListSearch from "./ListSearch"
 
 class Subscribe extends React.Component {
   constructor(props) {
@@ -43,7 +44,7 @@ class Subscribe extends React.Component {
   }
 
   render() {
-    const { messages, subscriptions, connection } = this.props;
+    const { messages, filteredMessages, subscriptions, connection, searchMessages } = this.props;
     const { sqls } = this.state;
 
     const btnStyle = classnames('button is-small is-info');
@@ -97,11 +98,24 @@ class Subscribe extends React.Component {
             {topics}
           </div>
         </div>
-        <div className="panel-block">
-          <div className="control">
-            Number of messages: {messages.length}
-          </div>
-        </div>
+        {!!messages.length && (
+          <Fragment>
+            <div className="panel-block">
+              <div className="control">
+                <ListSearch onSearchMessages={searchMessages} />
+              </div>
+            </div>
+            <div className="panel-block">
+              <div className="control">
+                <div>
+                  <span>Number of messages:</span>
+                  <span>{filteredMessages.length < messages.length ? `${filteredMessages.length} / ${messages.length}` : messages.length}</span>
+                </div>
+              </div>
+            </div>
+          </Fragment>
+        )
+        }
       </nav>
     );
   }
@@ -113,12 +127,14 @@ Subscribe.defaultProps = {
 Subscribe.propTypes = {
   subscribe: PropTypes.func.isRequired,
   unsubscribe: PropTypes.func.isRequired,
+  searchMessages: PropTypes.func,
 };
 
 const mapStateToProps = state => ({
   subscriptions: state.lenses.subscriptions,
   connection: state.lenses.connection,
   messages: state.session.messages,
+  filteredMessages: state.session.filteredMessages,
 });
 
 const mapDispatchToProps = {

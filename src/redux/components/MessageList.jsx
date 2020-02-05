@@ -128,7 +128,7 @@ MessageList.propTypes = {
 
 const mapStateToProps = state => ({
   message: state.session.message,
-  messages: state.session.messages
+  messages: state.session.filteredMessages,
 });
 
 const mapDispatchToProps = {
