@@ -12,3 +12,5 @@ So initially, as there were no existing tests, i wrote a really simple reducer t
 4. Add the UI for the search functionality. Created new component for the search input. This is a function component and uses the React useRef hook to effectivley manage its state. IMO 90% the components in this app shoul be function components not class components. There is far too much logic in them that can be abstracted and more effectivly tested. Also if function components were used you could prevent a lot of uneccesary re-rendering that might contribute to the performance of the application not seeming great at the moment.
 
 It would have been nice to introduce some enzyme UI tests at this point but i feel there is a lot of component refactoring to do first.
+
+5. I added functionality and test to limit the message list length so i could perform better manual testing of the search functionality as i was quickly hitting 20000 messages+ in the list and the browser stared to become unstable, even crashing at the 30/40k region.

@@ -33,12 +33,17 @@ const onConnectSuccess = state => Object.assign({}, state,
   { heartbeatCount: 0 });
 const onKafkaHeartbeat = state => Object.assign({}, state,
   { heartbeatCount: state.heartbeatCount + 1 });
+
+const MAX_MESSAGE_LIST_SIZE = 15000
+
+export const trimListIfMaxSizeReached = (list, maxSize) => list.length > maxSize ? list.slice(0, maxSize) : list
+
 const onKafkaMessage = (state, action) => {
   let messages = (action.payload && action.payload.content) || [];
   //messages = messages.map(message => message.value);
   return Object.assign({}, state,
     {
-      messages: state.messages.concat(messages),
+      messages: trimListIfMaxSizeReached(state.messages.concat(messages), MAX_MESSAGE_LIST_SIZE),
       filteredMessages: state.filteredMessages.concat(
         messages.filter(message => message.topic.match(state.search))
       ),
