@@ -20,7 +20,7 @@ function configureStore() {
     predicate: (getState, action) => action.type !== Type.UPDATE_PASSWORD
   });
 
-  const middleware = [logger, lensesWsMiddleware];
+  const middleware = [lensesWsMiddleware, logger];
 
   const store = createStore(
     rootReducer,
