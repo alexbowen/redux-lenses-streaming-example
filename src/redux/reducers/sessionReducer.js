@@ -2,6 +2,8 @@ import { createReducer } from 'reduxsauce';
 import { Type as KafkaType } from 'redux-lenses-streaming';
 import { Type } from '../actions';
 
+// import messages from './messages.mock'
+
 export const INITIAL_STATE = {
   heartbeatCount: 0,
   search: '',

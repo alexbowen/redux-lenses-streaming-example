@@ -12,3 +12,7 @@ Notes of actions taken for the lenses coding exercise
 5. I added functionality and test to limit the message list length so i could perform better manual testing of the search functionality as i was quickly hitting 20000 messages+ in the list and the browser stared to become unstable, even crashing at the 30/40k region.
 
 6. App Bulma tabs to switch between messages list and chart view. Converted the main container to a functional component as it was not using state and so was quick win to refactor. So i am using the useSate hook to manage the tab selection.
+
+7. Add a chart component that displays a bar chart. A timeline redux container/reducer added that stores aggregated data about incoming messages for each topic, the idea being to display a chart of realtime traffic of incoming messages. The timeline creates groups of time periods that keeps a count of messages received in this period. there is a queue to add messages to that fall outside the current time groups. Any messages received that are too old for the chart are not added. Constants are used for the the timeline time axis, it should be fairly easy to contol the axis time period from UI controls in future using these
+
+NB The chart is far as i got in 2 hours and would require more work to complete satisfactoraly and have suffucient testing.

@@ -33,7 +33,7 @@ const MainContainer = (props) => {
                   <li className={view === 'chart' ? "is-active" : ''}><a onClick={() => setView('chart')}>Traffic</a></li>
                 </ul>
               </div>
-              {view === 'list' ? <MessageList messages={messages} onCommitMessage={commit} /> : <TrafficChart />}
+              {view === 'list' ? <MessageList messages={messages} onCommitMessage={commit} /> : <TrafficChart data={props.timeline} />}
             </div>
           ) : null}
         </div>
@@ -47,6 +47,7 @@ const MainContainer = (props) => {
  */
 const mapStateToProps = state => ({
   messages: state.session.messages,
+  timeline: state.timeline.grouped,
 });
 
 const mapDispatchToProps = {
